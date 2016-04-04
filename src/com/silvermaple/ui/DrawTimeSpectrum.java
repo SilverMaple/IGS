@@ -38,8 +38,8 @@ public class DrawTimeSpectrum extends JPanel {
 			// 实际中应该按照采样率来设置间隔
 			y = hh-(int)(data[i*3]*k+hh/2);
 			
-			System.out.print(y);
-			System.out.print(" ");
+//			System.out.print(data[i*3]);
+//			System.out.print(" ");
 			
 			if(i!=0){
 				g.drawLine(x, y, prex, prey);

@@ -33,7 +33,6 @@ public class DrawFreqSpectrum extends JPanel {
 			step = 1;
 		
 		g.setColor(Color.blue);
-		double k = hh/500.0;
 		
 		//从n=1开始，n=0为直流分量
 		//n=0时，幅度h=data/N
@@ -43,13 +42,12 @@ public class DrawFreqSpectrum extends JPanel {
 		float fn = 0;
 		float h = 0;
 		int n = 1;
-		while(fn < 2000){
-			fn = (n-1) * (sampleRate / FFT_N);
-			h = (float) (data[n] / (FFT_N/2) * k);
-			System.out.println("第" + n + "个频率：" + fn + " 幅度：" + h);
-			int y = hh - (int) h;
-			if(y < 0) y *= -1;
-			y = (int)(y/100000.0);
+		while(fn < 2000 && n < data.length){
+			fn = (float)((n-1) * (sampleRate * 1.0 / FFT_N)); //第N个点的频率
+			h = (float) (Math.abs(data[n]) / (FFT_N/2)); 
+			int y = (int) (20*Math.log10(h)); //由公式计算出分贝大小
+			//System.out.println("第" + n + "个频率：" + fn + " 幅度：" + h + " 分贝：" + y);
+			y = hh - y;
 			int x = (int)(fn/5.0) * step;
 			// 每点都取出并绘制
 			// 实际中应该按照采样率来设置间隔			
@@ -57,5 +55,6 @@ public class DrawFreqSpectrum extends JPanel {
 			g.drawLine(x, hh, x, y);
 			n++;
 		}
+		System.out.println(FFT_N);
 	}
 }

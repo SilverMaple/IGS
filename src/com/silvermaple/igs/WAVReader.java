@@ -93,6 +93,11 @@ public class WAVReader {
 		return this.data;
 	}
 
+	/**
+	 * 
+	 * @param filename
+	 * 		识别的音乐文件 
+	 */
 	private void read(String filename) {
 		this.filename = filename;
 		
@@ -123,7 +128,7 @@ public class WAVReader {
 			
 			this.dataSubChunk = readString(lenDataSubChunk);
 			if(!dataSubChunk.endsWith("data"))
-				throw new IllegalArgumentException("data miss, " + filename + "is not a wave file.");
+				//throw new IllegalArgumentException("data miss, " + filename + " is not a wave file.");
 
 			this.subChunk2Size = readLong();
 			this.length = (int)(this.subChunk2Size/(this.bitsPerSample/8)/this.numChannels);
