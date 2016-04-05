@@ -1,4 +1,4 @@
-package noteIdentifier;
+package com.silvermaple.noteIdentifier;
 
 import com.silvermaple.fft.FFT;
 import com.silvermaple.igs.WAVReader;
@@ -22,7 +22,7 @@ public class NoteIdentifier {
 		System.out.println(data.length);
 		while(index + 4096 < data.length) {
 			System.arraycopy(data, index, temp, 0, 4096);
-			index += 4096;
+			index += 2048;
 			temp = hamming(temp); //加汉明窗处理
 			fft.calculate(temp); //fft处理
 			for(int i=temp.length/2 + 1; i<temp.length; i++) { //还原另一半数组

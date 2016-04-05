@@ -1,4 +1,4 @@
-package noteIdentifier;
+package com.silvermaple.noteIdentifier;
 
 /**
  * 

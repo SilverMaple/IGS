@@ -4,9 +4,8 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 
-import noteIdentifier.NoteIdentifier;
-
 import com.silvermaple.fft.FFT;
+import com.silvermaple.noteIdentifier.NoteIdentifier;
 import com.silvermaple.ui.DrawFreqSpectrum;
 import com.silvermaple.ui.DrawTimeSpectrum;
 
