@@ -18,11 +18,11 @@ public class NoteIdentifier {
 	public void identify() {
 		float[] data = reader.getData()[0]; //获得第一声道数据
 		int index=0; //记录汉明窗的初始位置
-		float[] temp = new float[4096];
-		System.out.println(data.length);
-		while(index + 4096 < data.length) {
-			System.arraycopy(data, index, temp, 0, 4096);
-			index += 2048;
+		float[] temp = new float[N];
+		displayMessage();
+		while(index + N < data.length) {
+			System.arraycopy(data, index, temp, 0, N);
+			index += (N/2);
 			temp = hamming(temp); //加汉明窗处理
 			fft.calculate(temp); //fft处理
 			for(int i=temp.length/2 + 1; i<temp.length; i++) { //还原另一半数组
@@ -63,10 +63,10 @@ public class NoteIdentifier {
 				index = n;
 		}
 		float freq = (float)((index-1) * (reader.getSampleRate() * 1.0 / fft.getFFT_N()));;
-		if(freq < 0 || freq > 4000) {
-			tone = "none";
-			return tone;
-		}
+//		if(freq < 0 || freq > 4000) {
+//			tone = "none";
+//			return tone;
+//		}
 		int low = 0;   
         int high = Tone.freq.length-1;   
         int middle = 0;
@@ -90,5 +90,11 @@ public class NoteIdentifier {
         System.out.println(index + " " + freq);
 		tone = Tone.tone[middle];
 		return tone;
+	}
+	
+	public void displayMessage() {
+		System.out.println("采样率：" + reader.getSampleRate() + " 数据长度：" + reader.getDataLength() 
+				+ " bit:" + reader.getBitPerSample() + " 声道数：" + reader.getNumChannels()
+				+ " 频率间隔：" + (reader.getSampleRate() * 1.0 / fft.getFFT_N()));
 	}
 }
