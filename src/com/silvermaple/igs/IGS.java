@@ -17,12 +17,15 @@ public class IGS {
 	
 	public static void main(String[] args) {
 		
-		String filename = "file.wav";
+		String filename = "test7.wav";
 		JFrame frame = new JFrame();
 		frame.setLayout(new GridLayout(2,1));
 		WAVReader reader = new WAVReader(filename);
 		if(reader.isSuccess()){
 			float[] data = reader.getData()[0]; //获取第一声道
+			for(int i=0; i<data.length; i++) {
+				System.out.println(data[i]);
+			}
 			
 			//画出时域图
 			DrawTimeSpectrum drawPanel2 = new DrawTimeSpectrum(data); // 创建一个绘制波形的面板

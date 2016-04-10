@@ -28,8 +28,7 @@ public class NoteIdentifier {
 			for(int i=temp.length/2 + 1; i<temp.length; i++) { //还原另一半数组
 				temp[i] = temp[temp.length-1-i];
 			}
-			String tone = basicTone(temp);
-			System.out.print(tone + " ");
+			basicTone(temp);
 		}
 		
 	}
@@ -87,8 +86,15 @@ public class NoteIdentifier {
 	        	middle += 1;
 	        }
         }
-        System.out.println(index + " " + freq);
 		tone = Tone.tone[middle];
+		System.out.println(tone + " " + index + " " + freq);
+//		if(tone == "7+++ ") {
+//			for(int i=0; i<range.length; i++) {
+//				float f = (float)((i-1) * (reader.getSampleRate() * 1.0 / fft.getFFT_N()));
+//				System.out.print(f + " ");
+//			}
+//		}
+//		System.out.println("");
 		return tone;
 	}
 	

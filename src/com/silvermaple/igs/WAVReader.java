@@ -145,7 +145,18 @@ public class WAVReader {
 			} else if(this.bitsPerSample == 16) {
 				for(int i=0; i<this.length; i++) {
 					for(int n=0; n<this.numChannels; n++) {
-						this.data[n][i] = this.readInt(); 
+						try {
+							this.data[n][i] = this.readInt(); 
+						} catch (Exception e) {
+							break;
+						}
+					}
+				}
+			} 
+			else if(this.bitsPerSample == 32) {
+				for(int i=0; i<this.length; i++) {
+					for(int n=0; n<this.numChannels; n++) {
+						this.data[n][i] = this.readFloat();
 					}
 				}
 			}
@@ -167,8 +178,9 @@ public class WAVReader {
 	private String readString(int len) {
 		byte[] buf = new byte[len];
 		try {
-			if(bis.read(buf) != len)
-				throw new IOException("no more data!");		
+			if(bis.read(buf) != len) {
+				throw new IOException("no more data for string!");
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -179,8 +191,10 @@ public class WAVReader {
 		byte[] buf = new byte[2];
 		int res = 0;
 		try {
-			if(bis.read(buf) != 2)
-				throw new IOException("no more data!");
+			if(bis.read(buf) != 2) {
+				//System.out.println(getBitPerSample() + " " + getDataLength() + " " + getNumChannels());
+				throw new IOException("no more data for int!");
+			}
 			// 计算出数值，相当于buf[1]*2^4 + buf[0]
 			res = (buf[0] & 0x000000FF) | (((int)buf[1])<<8);
 		} catch (IOException e) {
@@ -202,6 +216,29 @@ public class WAVReader {
 			res = l[0] | (l[1]<<8) | (l[2]<<16) | (l[3]<<24);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	private float readFloat() {
+		byte[] buf = new byte[4];
+		float res = 0;
+		try {
+			if(bis.read(buf) != 4) {
+				throw new IOException("no more data for float!");
+			}
+			/**
+			 * 32浮点数的格式为
+			 * 1位符号数位，8位阶数位，23位尾数位
+			 * SEEE EEEE EMMM MMMM MMMM MMMM MMMM MMMM
+			 * buf[3]    buf[2]    buf[1]    buf[0]
+			 */
+			long M = buf[0] | (buf[1] << 8) | ((buf[2] & 0x0000007F) << 16); //计算出尾数
+			int E = ((buf[2] & 0x00000080) >> 7) | ((buf[3] & 0x0000007F) << 1); //计算出阶数
+			int S = (buf[3] & 0x00000080) >> 7; //计算出符号
+			res = (-1) * S * 2^(E - 127) * (2^24 + M); //恢复float数值
+		} catch (IOException e) {
+			
 		}
 		return res;
 	}
